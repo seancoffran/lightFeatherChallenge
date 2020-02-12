@@ -6,10 +6,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.ArrayList;
+
 import org.json.JSONObject;
 
 import com.seanco.work.CodingChallenge.cipher.ShiftCipher;
 import com.seanco.work.CodingChallenge.main.Main;
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -31,46 +34,51 @@ public class Handlers {
 
 		private static final int STATUS_OK = 200;
 		private static final int STATUS_FAIL = 500;
+		private static final String DEFAULT_RESPONSE = "{\"EncodedMessage\": \"\"}";
 
 		@Override
-		public void handle(HttpExchange he) throws IOException {			
+		public void handle(HttpExchange he) throws IOException {
 			InputStreamReader isr = new InputStreamReader(he.getRequestBody(), "utf-8");
 			BufferedReader br = new BufferedReader(isr);
 			String line = br.readLine();
 			String query = "";
-			while(line != null) {
+			while (line != null) {
 				query += line;
 				line = br.readLine();
 			}
-			String response = "";
+			
 			try {
 				JSONObject json = new JSONObject(query);
-				response = ShiftCipher.cipher(json.getString("Message"), json.getInt("Shift"));
-				he.sendResponseHeaders(STATUS_OK, response.length());
+				String response = ShiftCipher.cipher(json.getString("Message"), json.getInt("Shift"));
+				sendResponse(he, response.getBytes("UTF-8"), STATUS_OK);
 				writeOutputStream(response);
-			} catch (Exception e) {
-				he.sendResponseHeaders(STATUS_FAIL, 0);
-			}
+			} catch (Exception e) {				
+				sendResponse(he, DEFAULT_RESPONSE.getBytes("UTF-8"), STATUS_FAIL);
+			}			
+		}
+
+		private void sendResponse(HttpExchange he, byte[] bs, int status) throws IOException {
+			he.sendResponseHeaders(status, bs.length);
 			OutputStream os = he.getResponseBody();
-			os.write(response.toString().getBytes());
+			os.write(bs);
 			os.close();
 		}
 	}
-	
-	 private static void writeOutputStream(String data) {
-	        OutputStream os = null;
-	        try {
-	            os = new FileOutputStream(new File("C:\\Users\\Public\\challenge.txt"));
-	            os.write(data.getBytes(), 0, data.length());
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }finally{
-	            try {
-	                os.close();
-	            } catch (IOException e) {
-	                e.printStackTrace();
-	            }
-	        }
-	    }
+
+	private static void writeOutputStream(String data) {
+		OutputStream os = null;
+		try {
+			os = new FileOutputStream(new File("C:\\Users\\Public\\challenge.txt"));
+			os.write(data.getBytes(), 0, data.length());
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				os.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 }

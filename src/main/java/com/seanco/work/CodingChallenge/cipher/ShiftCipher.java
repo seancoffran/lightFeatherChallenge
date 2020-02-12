@@ -2,6 +2,9 @@ package com.seanco.work.CodingChallenge.cipher;
 
 public class ShiftCipher {
 
+	private static String retStart = "{\"EncodedMessage\": \"";
+	private static String retEnd = "\"}";
+	//To prevent instantiation
 	private ShiftCipher() {
 	};
 
@@ -19,6 +22,6 @@ public class ShiftCipher {
 					s += (char) (msg.charAt(x) + shift);
 			}
 		}
-		return s;
+		return retStart + s + retEnd;
 	}
 }
