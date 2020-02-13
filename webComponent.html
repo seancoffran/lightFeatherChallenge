@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html data-bootstrap="register_app" data-migrate-mute="true"
+	lang="en-US>
+<head>
+<meta charset="utf-8">
+<title>LightFeather Challenge</title>
+<meta charset="UTF-8" /> 
+<link rel = "stylesheet" type = "text/css" href = "myStyle.css" />
+</head>
+<body>
+	<h1 align="center">Sign up Form</h1>
+
+	<form>
+		<fieldset >	
+			<legend>Sign Up information</legend>		
+		
+			<p>
+				<label>Username</label> <br />
+				<input type="text" id="myUserName"
+					maxlength="15" required="required" onchange="ready()" />
+			</p>
+
+			<p>
+				<label>Email</label> <br />
+				<input type="text" id="myEmail"
+					onchange="ready()" required="required" />
+			</p>
+			<p>
+				<label>Password</label> <br />
+				<input type="password" id="myPwd"
+					required="required" />
+			</p>
+			<p>
+				<label>Confirm Password</label> <br />
+				<input type="password"
+					id="myPwd2" onchange="ready()" required="required" />
+			</p>
+			<p>
+			<button id="submitButton" onclick="submit()" disabled="true">Submit</button>
+			</p>
+		</fieldset>
+	</form>
+
+	<script>
+		function ready() {
+			document.getElementById("submitButton").disabled = true;
+
+			var name = document.getElementById("myUserName").value;
+			var validEmail = validateEmail();
+			var validPw = confirmPassword();
+
+			if (name && validEmail && validPw) {
+				document.getElementById("submitButton").disabled = false;
+			}
+		}
+	</script>
+	<script>
+		function submit() {
+			alert("Creating new account")
+		}
+	</script>
+	<script>
+		function validateEmail() {
+			// not sure about this.
+			var email = document.getElementById("myEmail").value;
+			if (isBlank(email)) {
+				return (false);
+			}
+			if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+				return (true)
+			}
+			alert("Invalid email address format")
+			return (false)
+		}
+	</script>
+
+	<script>
+		function confirmPassword() {
+			var pw = document.getElementById("myPwd").value;
+			var pw2 = document.getElementById("myPwd2").value;
+			if (isBlank(pw) || isBlank(pw2)) {
+				return (false);
+			} else if (pw != pw2) {
+			alert("Passwords do not match")
+				return (false)
+			} else {
+				return (true)
+			}
+		}
+	</script>
+
+	<script>
+		function isBlank(str) {
+			return (!str || /^\s*$/.test(str));
+		}
+	</script>
+
+
+</body>
+
+
+
+</html>

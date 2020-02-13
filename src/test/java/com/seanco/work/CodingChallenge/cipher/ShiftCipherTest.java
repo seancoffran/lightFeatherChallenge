@@ -8,13 +8,16 @@ public class ShiftCipherTest {
 
 	@Test
 	public void singleWord() {
-		String expected = "gdg";
-		assertEquals(expected, ShiftCipher.cipher("dad", 3));
+		String cipher = ShiftCipher.cipher("dad", 3);
+		String expected = "{\"EncodedMessage\": \"gdg\"}";		
+		assertEquals(expected, cipher);
 	}
 	
 	@Test
 	public void multipleWord() {
-		String expected = "gdg lv juhdw";
-		assertEquals(expected, ShiftCipher.cipher("dad is great", 3));
+		String cipher = ShiftCipher.cipher("dad is great", 3);
+		String expected = "{\"EncodedMessage\": \"gdg lv juhdw\"}";
+		
+		assertEquals(expected, cipher);
 	}
 }
